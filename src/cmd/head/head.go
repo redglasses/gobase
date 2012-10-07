@@ -24,6 +24,11 @@ func Head(file ...string) (err []error) {
 		f *os.File
 		e error
 	)
+
+	if len(file) == 0 {
+		file = []string{"-"}
+	}
+
 	for _, s := range file {
 		if s == "-" {
 			f = os.Stdin
@@ -47,9 +52,6 @@ func Head(file ...string) (err []error) {
 }
 
 func main() {
-	exitCode := 0
-	defer os.Exit(exitCode)
-
 	parse: for {
 		switch g.Getopt("n:") {
 			case g.EOF:
@@ -65,9 +67,5 @@ func main() {
 		}
 	}
 
-	if len(os.Args[g.Optind:]) == 0 {
-		exitCode = len(Head("-"))
-	} else {
-		exitCode = len(Head(os.Args[g.Optind:]...))
-	}
+	os.Exit(len(Head(os.Args[g.Optind:]...)))
 }
