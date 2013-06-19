@@ -1,0 +1,36 @@
+.TH CAL 1
+.SH NAME
+cal \- print a calendar
+.SH SYNOPSIS
+.B cal
+[[
+.I month
+]
+.I year
+]
+.SH DESCRIPTION
+.I Cal
+prints a calendar.
+.I Month
+is either a number from 1 to 12,
+a lower case month name,
+or a lower case three-letter prefix of a month name.
+.I Month
+can only be specified while
+.I year
+is specified.
+.I Year
+can be between 1 and 9999, If present without
+.I month
+specified, all months are printed.
+.SH EXAMPLES
+.EX
+	cal september 1752
+	cal sep 1752
+	cal 9 1752
+	cal 1752
+.EE
+.SH SOURCE
+.B \*9/src/cmd/cal.go
+.SH TODO
+Add support for POSIX environment variable TZ.
