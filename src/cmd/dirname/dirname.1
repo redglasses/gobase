@@ -1,0 +1,16 @@
+.TH DIRNAME 1
+.SH NAME
+dirname \- strip file name suffix
+.SH SYNOPSIS
+.B dirname
+.I name...
+.SH DESCIPTION
+.PP
+.I Dirname
+deletes any suffix after last slash
+.RB ( / )
+presented in each
+.IR name ,
+and prints result on the standard output.
+.SH SOURCE
+.B \*9/src/cmd/dirname/dirname.go

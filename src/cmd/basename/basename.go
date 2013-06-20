@@ -2,8 +2,9 @@ package main
 
 import (
 	g "github.com/redglasses/gobase/src/getopt"
-	p "path"
 	"os"
+	"path"
+	"strings"
 )
 
 var Flagd = false
@@ -13,18 +14,21 @@ func usage() {
 	os.Exit(1)
 }
 
-func Basename(path string, suffix string) string {
-	if Flagd {
-		path = p.Dir(path)
-	} else {
-		path = p.Base(path)
+func Basename(name string, suffix string) string {
+	fn := path.Base
+	if Flagd { fn = path.Dir }
+
+	name = fn(name)
+	if slen, nlen := len(suffix), len(name);
+	   slen > 0 && slen < nlen && name[nlen-slen:] == suffix {
+		name = name[0 : nlen-slen]
 	}
 
-	if len(suffix) > 0 && len(suffix) < len(path) &&
-	   path[len(path)-len(suffix):] == suffix {
-		return path[0:len(path)-len(suffix)]
+	if '/' == os.PathSeparator {
+		return name
 	}
-	return path
+
+	return strings.Replace(name, "/", string(os.PathSeparator), -1)
 }
 
 func main() {
@@ -45,7 +49,8 @@ func main() {
 			suffix = os.Args[g.Optind+1]
 			fallthrough
 		case 1:
-			os.Stdout.WriteString(Basename(os.Args[g.Optind],suffix)+"\n")
+			os.Stdout.WriteString(Basename(os.Args[g.Optind],
+			                               suffix)+"\n")
 		default:
 			usage()
 	}

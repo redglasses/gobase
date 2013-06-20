@@ -1,34 +1,34 @@
 package main
 
 import (
-	g "../../getopt"
-	"path/filepath"
 	"os"
+	"path"
+	"strings"
 )
 
 func usage() {
-	os.Stderr.WriteString("usage: dirname string\n")
+	os.Stderr.WriteString("usage: dirname name...")
 	os.Exit(1)
 }
 
-func Dirname(path string) string {
-	return filepath.Dir(path)
+func Dirname(name string) string {
+	name = path.Dir(name)
+
+	if '/' == os.PathSeparator {
+		return name
+	}
+
+	return strings.Replace(name, "/", string(os.PathSeparator), -1)
 }
 
 func main() {
-	parse: for {
-		switch g.Getopt("") {
-			case g.EOF:
-				break parse
-			default:
-				usage()
-		}
+	if len(os.Args) == 1 {
+		usage()
 	}
 
-	if len(os.Args[g.Optind:]) == 1 {
-		os.Stdout.WriteString(Dirname(os.Args[g.Optind])+"\n")
-		os.Exit(0)
+	for _, s := range os.Args[1:] {
+		os.Stdout.WriteString(s+"\n")
 	}
 
-	usage()
+	os.Exit(0)
 }
