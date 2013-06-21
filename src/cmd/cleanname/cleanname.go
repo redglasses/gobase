@@ -3,8 +3,7 @@ package main
 import (
 	g "github.com/redglasses/gobase/src/getopt"
 	"os"
-	"path"
-	"strings"
+	"path/filepath"
 )
 
 var Flagd string
@@ -15,17 +14,13 @@ func usage() {
 }
 
 func Cleanname(name string) string {
-	name = path.Clean(name)
+	name = filepath.Clean(name)
 
-	if len(Flagd) > 0 && name[0] != '/' {
-		name = path.Clean(Flagd) + "/" + name
+	if len(Flagd) > 0 && filepath.VolumeName(name) == "" {
+		name = filepath.Clean(Flagd) + string(os.PathSeparator) + name
 	}
 
-	if '/' == os.PathSeparator {
-		return name
-	}
-
-	return strings.Replace(name, "/", string(os.PathSeparator), -1)
+	return name
 }
 
 func main() {

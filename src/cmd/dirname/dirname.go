@@ -2,8 +2,7 @@ package main
 
 import (
 	"os"
-	"path"
-	"strings"
+	"path/filepath"
 )
 
 func usage() {
@@ -12,13 +11,7 @@ func usage() {
 }
 
 func Dirname(name string) string {
-	name = path.Dir(name)
-
-	if '/' == os.PathSeparator {
-		return name
-	}
-
-	return strings.Replace(name, "/", string(os.PathSeparator), -1)
+	return filepath.Dir(filepath.Clean(name))
 }
 
 func main() {
@@ -27,7 +20,7 @@ func main() {
 	}
 
 	for _, s := range os.Args[1:] {
-		os.Stdout.WriteString(s+"\n")
+		os.Stdout.WriteString(Dirname(s)+"\n")
 	}
 
 	os.Exit(0)

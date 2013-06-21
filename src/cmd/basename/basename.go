@@ -3,8 +3,7 @@ package main
 import (
 	g "github.com/redglasses/gobase/src/getopt"
 	"os"
-	"path"
-	"strings"
+	"path/filepath"
 )
 
 var Flagd = false
@@ -15,20 +14,16 @@ func usage() {
 }
 
 func Basename(name string, suffix string) string {
-	fn := path.Base
-	if Flagd { fn = path.Dir }
+	fn := filepath.Base
+	if Flagd { fn = filepath.Dir }
 
-	name = fn(name)
+	name = fn(filepath.Clean(name))
 	if slen, nlen := len(suffix), len(name);
 	   slen > 0 && slen < nlen && name[nlen-slen:] == suffix {
 		name = name[0 : nlen-slen]
 	}
 
-	if '/' == os.PathSeparator {
-		return name
-	}
-
-	return strings.Replace(name, "/", string(os.PathSeparator), -1)
+	return name
 }
 
 func main() {
